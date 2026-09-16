@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRERLC - Discover, Advertise, Engage</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="typography.css">
+  <link rel="stylesheet" href="account.css">
+  <link rel="stylesheet" href="discover.css">
+   <style>
+    .home-search{display:flex;align-items:center;width:100%;max-width:none;align-self:stretch;height:92px;margin-top:48px;padding:8px;border:1px solid #666;border-radius:50px;background:#111;box-shadow:0 0 0 8px #0c0c0c,0 16px 45px rgba(255,255,255,.06);overflow:hidden}
+    .home-search input{flex:1;width:100%;font-size:22px;padding:25px 27px;border-radius:42px}
+    .home-search button{flex:0 0 125px;min-width:125px;height:100%;border-radius:42px;font-size:16px;transition:transform .2s,background .2s}
+    .home-search button:hover{transform:scale(1.03);background:#ddd}
+    .search-note{max-width:800px;margin:19px 0 0;color:#888;font-size:13px;line-height:1.6}
+    .search-note b{color:#fff}
+    .search-note a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:700px){.home-search{height:76px;margin-top:34px;padding:6px}.home-search input{font-size:16px;padding:18px}.home-search button{flex-basis:105px;min-width:105px;font-size:13px}}
+   </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">PRERLC</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a class="active" href="index.html">Discover</a>
+      <a href="popular.html">Popular</a>
+      <a href="browse.html">Browse</a>
+      <a href="hiring.html">Hiring</a>
+      <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-actions"><button class="login-button" id="openAccount" type="button">Login with Discord</button><a class="header-action" href="submit.html">List a server</a></div>
+  </header>
+
+  <main class="page home-page">
+    <p class="eyebrow">THE ER:LC COMMUNITY DIRECTORY</p>
+    <h1>Discover,<br><em>Advertise, Engage.</em></h1>
+    <p class="lead">Find ER:LC servers, share your work, and connect with the community.</p>
+    <form class="home-search" id="homeSearch">
+      <input id="searchInput" type="search" placeholder="Search servers or categories..." aria-label="Search servers">
+      <button type="submit">Search</button>
+    </form>
+    <p class="search-note">Add tags like <b>Roleplay</b>, <b>Design</b>, <b>Tech</b>, and <b>Misc</b>. Find your talented mates in the <a href="hiring.html">Hiring PRERLC Zone</a> - free.</p>
+    <section class="discover-list" id="discoverList" aria-labelledby="discoverTitle">
+      <div class="discover-heading"><p class="eyebrow">LATEST DISCOVERIES</p><h2 id="discoverTitle">Servers listed by the community</h2></div>
+      <div id="listedServers"><p class="empty-discover">No community listings yet. Be the first to add a server.</p></div>
+    </section>
+  </main>
+
+  <footer class="simple-footer">© 2026 PRERLC <span>Discover, Advertise, Engage.</span></footer>
+  <div class="account-modal" id="accountModal" aria-hidden="true">
+    <div class="account-backdrop" data-close-account></div>
+    <section class="account-panel" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+      <button class="account-close" type="button" data-close-account aria-label="Close">×</button>
+      <div id="authView">
+        <p class="eyebrow">PRERLC ACCOUNT</p>
+        <h2 id="accountTitle">Manage your<br><em>servers.</em></h2>
+        <p class="account-copy">Login with Discord to see your listed servers and add new communities to PRERLC.</p>
+        <button class="discord-login" id="discordAuth" type="button">Continue with Discord</button>
+        <small class="auth-note">Your Discord identity is used for account access.</small>
+      </div>
+      <div id="dashboardView" hidden>
+        <div class="account-heading"><div><p class="eyebrow">YOUR DASHBOARD</p><h2>My servers</h2></div><button class="small-button" id="showAddServer" type="button">+ Add server</button></div>
+        <div class="account-user"><span class="user-avatar">A</span><span><b>Alex</b><small>Signed in with Discord</small></span></div>
+        <div class="owned-servers" id="ownedServers"><article><span class="server-logo">N</span><div><b>Northstar County</b><small>Roleplay · 8.9k members</small></div><div class="owned-actions"><a href="https://discord.com" target="_blank" rel="noreferrer">Open link ↗</a><button class="remove-owned" type="button">Remove just for me</button></div></article><article><span class="server-logo green-logo">C</span><div><b>Civic Works</b><small>Design · 2.1k members</small></div><div class="owned-actions"><a href="https://discord.com" target="_blank" rel="noreferrer">Open link ↗</a><button class="remove-owned" type="button">Remove just for me</button></div></article></div>
+        <form class="add-server-form" id="addServerForm" hidden><p class="eyebrow">NEW SERVER</p><label>Server name<input name="name" required placeholder="Northstar County"></label><label>Server logo<input name="logo" type="file" accept="image/*"></label><label>Server bio<textarea name="bio" required placeholder="Tell players what your server is about..."></textarea></label><label>Server link<input name="link" type="url" required placeholder="https://discord.gg/"></label><fieldset><legend>Category</legend><label><input type="radio" name="category" value="Roleplay" checked> Roleplay</label><label><input type="radio" name="category" value="Design"> Design</label><label><input type="radio" name="category" value="Tech"> Tech</label><label><input type="radio" name="category" value="Misc"> Misc</label></fieldset><button class="publish-button" type="submit">Add server</button></form>
+      </div>
+    </section>
+  </div>
+  <script>
+    document.querySelector('#homeSearch').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const query = document.querySelector('#searchInput').value.trim();
+      if (!query) return;
+      document.querySelectorAll('#listedServers article').forEach((card) => { card.hidden = !card.dataset.search.includes(query.toLowerCase()); });
+    });
+
+    const storedServers = JSON.parse(localStorage.getItem('prerlcServers') || '[]');
+    const removedServers = new Set(JSON.parse(localStorage.getItem('prerlcRemovedServers') || '[]'));
+    const serverKey = (server) => server.id || `${server.name}|${server.link}`;
+    const visibleServers = storedServers.filter((server) => !removedServers.has(serverKey(server)));
+    const listedServers = document.querySelector('#listedServers');
+    if (visibleServers.length) {
+      listedServers.innerHTML = visibleServers.map((server) => `<article class="listed-server" data-id="${server.id || ''}" data-key="${serverKey(server)}" data-search="${server.name.toLowerCase()} ${server.category.toLowerCase()} ${(server.tags || []).join(' ').toLowerCase()} ${server.bio.toLowerCase()}">${server.logo ? `<img src="${server.logo}" alt="${server.name} logo">` : '<span class="listing-placeholder">' + server.name.charAt(0).toUpperCase() + '</span>'}<div><h3>${server.name}</h3><div class="listing-tags"><span>${server.category}</span>${(server.tags || []).map((tag) => `<span>${tag}</span>`).join('')}</div><p>${server.bio}</p></div><div class="listing-actions"><a href="${server.link}" target="_blank" rel="noreferrer">Open ↗</a><button class="remove-server" type="button">Remove</button></div></article>`).join('');
+      listedServers.querySelectorAll('.remove-server').forEach((button) => button.addEventListener('click', () => {
+        const card = button.closest('.listed-server');
+        const hidden = new Set(JSON.parse(localStorage.getItem('prerlcRemovedServers') || '[]'));
+        hidden.add(card.dataset.key);
+        localStorage.setItem('prerlcRemovedServers', JSON.stringify([...hidden]));
+        const remaining = JSON.parse(localStorage.getItem('prerlcServers') || '[]').filter((server) => serverKey(server) !== card.dataset.key);
+        localStorage.setItem('prerlcServers', JSON.stringify(remaining));
+        card.remove();
+      }));
+    }
+
+    const accountModal = document.querySelector('#accountModal');
+    const authView = document.querySelector('#authView');
+    const dashboardView = document.querySelector('#dashboardView');
+    const addServerForm = document.querySelector('#addServerForm');
+    document.querySelector('#openAccount').addEventListener('click', () => { accountModal.classList.add('open'); accountModal.setAttribute('aria-hidden', 'false'); });
+    document.querySelectorAll('[data-close-account]').forEach((item) => item.addEventListener('click', () => { accountModal.classList.remove('open'); accountModal.setAttribute('aria-hidden', 'true'); }));
+    const callbackUrl = `${window.location.origin}/api/auth/callback`;
+    const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=1549815037395206164&response_type=code&redirect_uri=${encodeURIComponent(callbackUrl)}&scope=identify+guilds`;
+    document.querySelector('#discordAuth').addEventListener('click', () => {
+      window.open(discordAuthUrl, 'prerlcDiscordLogin', 'width=520,height=760,resizable=yes,scrollbars=yes');
+    });
+    window.addEventListener('message', async (event) => {
+      if (event.origin !== window.location.origin || event.data?.type !== 'prerlc-auth-complete') return;
+      const response = await fetch('/api/me');
+      if (!response.ok) return;
+      const account = await response.json();
+      authView.hidden = true;
+      dashboardView.hidden = false;
+      document.querySelector('.account-user b').textContent = account.user.global_name || account.user.username;
+      document.querySelector('.user-avatar').textContent = (account.user.global_name || account.user.username).charAt(0).toUpperCase();
+      const serverList = document.querySelector('#ownedServers');
+      serverList.innerHTML = account.guilds.map((guild) => `<article><span class="server-logo">${guild.name.charAt(0).toUpperCase()}</span><div><b>${guild.name}</b><small>Discord server</small></div><a href="https://discord.com/channels/${guild.id}" target="_blank" rel="noreferrer">Open link ↗</a></article>`).join('') || '<p class="account-copy">No Discord servers found.</p>';
+    });
+    document.querySelector('#showAddServer').addEventListener('click', () => { addServerForm.hidden = !addServerForm.hidden; });
+    document.querySelectorAll('.remove-owned').forEach((button) => button.addEventListener('click', () => button.closest('article').remove()));
+    addServerForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(addServerForm);
+      const card = document.createElement('article');
+      card.innerHTML = `<span class="server-logo">${(formData.get('name') || 'S').toString().charAt(0).toUpperCase()}</span><div><b>${formData.get('name')}</b><small>${formData.get('category')} · New listing</small></div><a href="${formData.get('link')}" target="_blank" rel="noreferrer">Open link ↗</a>`;
+      document.querySelector('#ownedServers').append(card);
+      addServerForm.reset();
+      addServerForm.hidden = true;
+    });
+  </script>
+</body>
+</html>

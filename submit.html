@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>List a server | PRERLC</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="typography.css">
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="index.html">PRERLC</a><nav class="site-nav"><a href="index.html">Discover</a><a href="popular.html">Popular</a><a href="browse.html">Browse</a><a href="hiring.html">Hiring</a><a href="faq.html">FAQ</a></nav><a class="header-action" href="submit.html">List a server</a></header>
+  <main class="page"><p class="eyebrow">CONTRIBUTE TO THE INDEX</p><h1>List your<br><em>server.</em></h1><p class="lead">Add your logo, bio, link, and category. Your listing will appear immediately on Discover in this browser.</p>
+    <form class="form-panel" id="serverForm"><label>Server name<input name="name" required placeholder="Northstar County"></label><label>Server logo <input name="logo" type="file" accept="image/png,image/jpeg,image/webp"></label><label>Server type<select name="category"><option>Roleplay</option><option>Design</option><option>Tech</option><option>Misc</option></select></label><fieldset class="tag-options"><legend>Tags</legend><label><input type="checkbox" name="tags" value="Roleplay"> Roleplay</label><label><input type="checkbox" name="tags" value="Bot"> Bot</label><label><input type="checkbox" name="tags" value="Design"> Design</label><label><input type="checkbox" name="tags" value="Tech"> Tech</label><label><input type="checkbox" name="tags" value="Community"> Community</label><label><input type="checkbox" name="tags" value="Serious"> Serious</label><label><input type="checkbox" name="tags" value="Misc"> Misc</label></fieldset><label>Server link<input name="link" type="url" required placeholder="https://discord.gg/"></label><label>About your server<textarea name="bio" required placeholder="Tell players what your server is about..."></textarea></label><button type="submit">Publish to Discover ↗</button></form>
+  </main>
+  <footer class="simple-footer">© 2026 PRERLC</footer>
+  <script>
+    const form = document.querySelector('#serverForm');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const logoFile = data.get('logo');
+      const saveServer = (logo) => {
+        const servers = JSON.parse(localStorage.getItem('prerlcServers') || '[]');
+        servers.unshift({ id: crypto.randomUUID(), owner: true, name: data.get('name'), category: data.get('category'), tags: data.getAll('tags'), link: data.get('link'), bio: data.get('bio'), logo });
+        localStorage.setItem('prerlcServers', JSON.stringify(servers));
+        window.location.href = 'index.html';
+      };
+      if (logoFile && logoFile.size) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => saveServer(reader.result));
+        reader.readAsDataURL(logoFile);
+      } else saveServer('');
+    });
+  </script>
+</body>
+</html>

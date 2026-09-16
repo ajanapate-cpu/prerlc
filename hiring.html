@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hiring | PRERLC</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="typography.css">
+  <style>.remove-profile{display:block;margin-top:7px;border:0;background:transparent;color:#888;font:10px Arial;text-decoration:underline;cursor:pointer}.remove-profile:hover{color:#fff}</style>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="index.html">PRERLC</a><nav class="site-nav"><a href="index.html">Discover</a><a href="popular.html">Popular</a><a href="browse.html">Browse</a><a class="active" href="hiring.html">Hiring</a><a href="faq.html">FAQ</a></nav><a class="header-action" href="submit.html">List a server</a></header>
+  <main class="page">
+    <p class="eyebrow">THE HIRING PRERLC ZONE</p>
+    <h1>Find your<br><em>talent.</em></h1>
+    <p class="lead">Connect with creators and service providers for your next ER:LC project. Listing your profile is free.</p>
+
+    <div class="page-list" id="talentList">
+      <article class="list-item"><span class="number">AV</span><div><h2>Atlas Visuals</h2><p>Branding, liveries, uniforms · Experienced in Photoshop and Blender</p></div><strong>From $15 · 3 days</strong></article>
+      <article class="list-item"><span class="number">MK</span><div><h2>Mika K.</h2><p>UI design, photography, ads · Experienced in Figma</p></div><strong>From $10 · 2 days</strong></article>
+    </div>
+
+    <form class="form-panel" id="talentForm">
+      <p class="eyebrow">ADD YOUR PROFILE</p>
+      <h2>Show people what you do.</h2>
+      <button type="button" id="discordButton">Apply to get hired through dashboard</button>
+      <div id="profileFields" hidden>
+        <label>Discord username<input name="discord" required placeholder="username or username#0000"></label>
+        <label>Experience<input name="experience" required placeholder="e.g. 2 years"></label>
+        <label>Experienced in<input name="skills" required placeholder="Liveries, graphics, management..."></label>
+        <label>Starting price from<input name="price" required placeholder="e.g. $10 per order"></label>
+        <label>Number of days you can take per order<input name="days" type="number" min="1" required placeholder="e.g. 3"></label>
+        <button type="submit">Publish profile ↗</button>
+      </div>
+    </form>
+  </main>
+  <footer class="simple-footer">© 2026 PRERLC</footer>
+  <script>
+    const talentForm = document.querySelector('#talentForm');
+    const discordButton = document.querySelector('#discordButton');
+    const profileFields = document.querySelector('#profileFields');
+    const talentList = document.querySelector('#talentList');
+    discordButton.addEventListener('click', () => { discordButton.hidden = true; profileFields.hidden = false; });
+    const savedProfiles = JSON.parse(localStorage.getItem('prerlcTalentProfiles') || '[]');
+    savedProfiles.forEach((profile) => addProfile(profile, false));
+    function addProfile(profile, isOwner) {
+      const initials = profile.discord.slice(0, 2).toUpperCase();
+      const item = document.createElement('article');
+      item.className = 'list-item';
+      item.innerHTML = `<span class="number">${initials}</span><div><h2>${profile.discord}</h2><p>${profile.experience} experience · Experienced in ${profile.skills}</p></div><strong>From ${profile.price} · ${profile.days} days <button class="remove-profile" type="button">Remove</button></strong>`;
+      if (item.querySelector('.remove-profile')) item.querySelector('.remove-profile').addEventListener('click', () => {
+        if (profile.id) {
+          const remaining = JSON.parse(localStorage.getItem('prerlcTalentProfiles') || '[]').filter((saved) => saved.id !== profile.id);
+          localStorage.setItem('prerlcTalentProfiles', JSON.stringify(remaining));
+        }
+        item.remove();
+      });
+      talentList.append(item);
+    }
+    talentForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(talentForm);
+      const profile = { id: crypto.randomUUID(), discord: data.get('discord'), experience: data.get('experience'), skills: data.get('skills'), price: data.get('price'), days: data.get('days') };
+      const profiles = JSON.parse(localStorage.getItem('prerlcTalentProfiles') || '[]');
+      profiles.unshift(profile);
+      localStorage.setItem('prerlcTalentProfiles', JSON.stringify(profiles));
+      addProfile(profile, true);
+      talentForm.reset();
+      profileFields.hidden = true;
+      discordButton.hidden = false;
+    });
+  </script>
+</body>
+</html>
